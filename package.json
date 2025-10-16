@@ -1,6 +1,6 @@
 {
-  "name": "delivr-cli",
-  "version": "0.0.1",
+  "name": "@d11/delivr-cli",
+  "version": "0.0.2",
   "description": "Management CLI for Delivr - deploy mobile app updates over-the-air",
   "main": "./script/cli.js",
   "scripts": {
@@ -26,7 +26,7 @@
   },
   "files": [
     "bin/**/*",
-    "bsdiff/**/*",
+    "bsdiff/bsdiff43",
     "README.md",
     "LICENSE.txt"
   ],

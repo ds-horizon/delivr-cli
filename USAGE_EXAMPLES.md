@@ -1,22 +1,22 @@
-# CodePush CLI - Usage Examples for End Users
+# Delivr CLI - Usage Examples for End Users
 
-This guide shows how to use the CodePush CLI in your React Native project after installing it as an npm package.
+This guide shows how to use the Delivr CLI (a CodePush-compatible tool) in your React Native project after installing it as an npm package.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
 ```bash
 # Install as dev dependency (recommended)
-npm install --save-dev @your-org/code-push-cli
+npm install --save-dev @d11/delivr-cli
 
 # Or install globally
-npm install -g @your-org/code-push-cli
+npm install -g @d11/delivr-cli
 
 # Or use directly without installing
-npx @your-org/code-push-cli --help
+npx @d11/delivr-cli --help
 ```
 
 ---
@@ -31,28 +31,28 @@ Add scripts to your `package.json`:
 {
   "name": "my-react-native-app",
   "scripts": {
-    "codepush:login": "code-push-standalone login",
-    "codepush:setup": "npm run codepush:create-apps",
-    "codepush:create-apps": "code-push-standalone app add MyOrg/MyApp-iOS && code-push-standalone app add MyOrg/MyApp-Android",
+    "delivr:login": "delivr-cli login",
+    "delivr:setup": "npm run delivr:create-apps",
+    "delivr:create-apps": "delivr-cli app add MyOrg/MyApp-iOS && delivr-cli app add MyOrg/MyApp-Android",
     
-    "codepush:staging:ios": "code-push-standalone release-react MyOrg/MyApp-iOS ios -d Staging",
-    "codepush:staging:android": "code-push-standalone release-react MyOrg/MyApp-Android android -d Staging",
-    "codepush:staging": "npm run codepush:staging:ios && npm run codepush:staging:android",
+    "delivr:staging:ios": "delivr-cli release-react MyOrg/MyApp-iOS ios -d Staging",
+    "delivr:staging:android": "delivr-cli release-react MyOrg/MyApp-Android android -d Staging",
+    "delivr:staging": "npm run delivr:staging:ios && npm run delivr:staging:android",
     
-    "codepush:production:ios": "code-push-standalone release-react MyOrg/MyApp-iOS ios -d Production --mandatory",
-    "codepush:production:android": "code-push-standalone release-react MyOrg/MyApp-Android android -d Production --mandatory",
-    "codepush:production": "npm run codepush:production:ios && npm run codepush:production:android",
+    "delivr:production:ios": "delivr-cli release-react MyOrg/MyApp-iOS ios -d Production --mandatory",
+    "delivr:production:android": "delivr-cli release-react MyOrg/MyApp-Android android -d Production --mandatory",
+    "delivr:production": "npm run delivr:production:ios && npm run delivr:production:android",
     
-    "codepush:promote:ios": "code-push-standalone promote MyOrg/MyApp-iOS Staging Production",
-    "codepush:promote:android": "code-push-standalone promote MyOrg/MyApp-Android Staging Production",
-    "codepush:promote": "npm run codepush:promote:ios && npm run codepush:promote:android",
+    "delivr:promote:ios": "delivr-cli promote MyOrg/MyApp-iOS Staging Production",
+    "delivr:promote:android": "delivr-cli promote MyOrg/MyApp-Android Staging Production",
+    "delivr:promote": "npm run delivr:promote:ios && npm run delivr:promote:android",
     
-    "codepush:status:ios": "code-push-standalone deployment ls MyOrg/MyApp-iOS",
-    "codepush:status:android": "code-push-standalone deployment ls MyOrg/MyApp-Android",
-    "codepush:status": "npm run codepush:status:ios && npm run codepush:status:android"
+    "delivr:status:ios": "delivr-cli deployment ls MyOrg/MyApp-iOS",
+    "delivr:status:android": "delivr-cli deployment ls MyOrg/MyApp-Android",
+    "delivr:status": "npm run delivr:status:ios && npm run delivr:status:android"
   },
   "devDependencies": {
-    "@your-org/code-push-cli": "^1.0.0"
+    "@d11/delivr-cli": "^0.0.1"
   }
 }
 ```
@@ -60,20 +60,20 @@ Add scripts to your `package.json`:
 **Usage:**
 ```bash
 # First-time setup
-npm run codepush:login
-npm run codepush:setup
+npm run delivr:login
+npm run delivr:setup
 
 # Deploy to staging
-npm run codepush:staging
+npm run delivr:staging
 
 # Check deployment status
-npm run codepush:status
+npm run delivr:status
 
 # Promote to production
-npm run codepush:promote
+npm run delivr:promote
 
 # Or deploy directly to production
-npm run codepush:production
+npm run delivr:production
 ```
 
 ---
@@ -82,28 +82,28 @@ npm run codepush:production
 
 ```bash
 # With global install
-code-push-standalone app add MyOrg/MyApp-iOS
-code-push-standalone release-react MyOrg/MyApp-iOS ios -d Staging
+delivr-cli app add MyOrg/MyApp-iOS
+delivr-cli release-react MyOrg/MyApp-iOS ios -d Staging
 
 # With local install (via npx)
-npx code-push-standalone app add MyOrg/MyApp-iOS
-npx code-push-standalone release-react MyOrg/MyApp-iOS ios -d Staging
+npx delivr-cli app add MyOrg/MyApp-iOS
+npx delivr-cli release-react MyOrg/MyApp-iOS ios -d Staging
 
 # With yarn
-yarn code-push-standalone app add MyOrg/MyApp-iOS
+yarn delivr-cli app add MyOrg/MyApp-iOS
 ```
 
 ---
 
 ### Method 3: Using Aliases
 
-If you want shorter commands, use the `codepush` alias:
+If you want shorter commands, use the `delivr` alias:
 
 ```json
 {
   "scripts": {
-    "cp:staging:ios": "codepush release-react MyOrg/MyApp-iOS ios -d Staging",
-    "cp:prod:ios": "codepush release-react MyOrg/MyApp-iOS ios -d Production -m"
+    "cp:staging:ios": "delivr release-react MyOrg/MyApp-iOS ios -d Staging",
+    "cp:prod:ios": "delivr release-react MyOrg/MyApp-iOS ios -d Production -m"
   }
 }
 ```
@@ -116,15 +116,15 @@ If you want shorter commands, use the `codepush` alias:
 
 ```bash
 # 1. Login to CodePush server
-npm run codepush:login
+npm run delivr:login
 
 # 2. Create apps
-code-push-standalone app add MyOrg/MyApp-iOS
-code-push-standalone app add MyOrg/MyApp-Android
+delivr-cli app add MyOrg/MyApp-iOS
+delivr-cli app add MyOrg/MyApp-Android
 
 # 3. Get deployment keys
-code-push-standalone deployment ls MyOrg/MyApp-iOS -k
-code-push-standalone deployment ls MyOrg/MyApp-Android -k
+delivr-cli deployment ls MyOrg/MyApp-iOS -k
+delivr-cli deployment ls MyOrg/MyApp-Android -k
 
 # 4. Configure your mobile app with the Staging key
 # Add to Info.plist (iOS) or build.gradle (Android)
@@ -138,12 +138,12 @@ code-push-standalone deployment ls MyOrg/MyApp-Android -k
 {
   "scripts": {
     "deploy:staging": "npm run deploy:staging:ios && npm run deploy:staging:android",
-    "deploy:staging:ios": "code-push-standalone release-react MyOrg/MyApp-iOS ios -d Staging --des \"$npm_package_version\"",
-    "deploy:staging:android": "code-push-standalone release-react MyOrg/MyApp-Android android -d Staging --des \"$npm_package_version\"",
+    "deploy:staging:ios": "delivr-cli release-react MyOrg/MyApp-iOS ios -d Staging --des \"$npm_package_version\"",
+    "deploy:staging:android": "delivr-cli release-react MyOrg/MyApp-Android android -d Staging --des \"$npm_package_version\"",
     
     "deploy:promote": "npm run deploy:promote:ios && npm run deploy:promote:android",
-    "deploy:promote:ios": "code-push-standalone promote MyOrg/MyApp-iOS Staging Production --des \"Promoted from staging\"",
-    "deploy:promote:android": "code-push-standalone promote MyOrg/MyApp-Android Staging Production --des \"Promoted from staging\""
+    "deploy:promote:ios": "delivr-cli promote MyOrg/MyApp-iOS Staging Production --des \"Promoted from staging\"",
+    "deploy:promote:android": "delivr-cli promote MyOrg/MyApp-Android Staging Production --des \"Promoted from staging\""
   }
 }
 ```
@@ -166,9 +166,9 @@ npm run deploy:promote
 ```json
 {
   "scripts": {
-    "deploy:prod:10": "code-push-standalone release-react MyOrg/MyApp-iOS ios -d Production -r 10 --des \"$npm_package_version (10% rollout)\"",
-    "deploy:prod:increase": "code-push-standalone patch MyOrg/MyApp-iOS Production -r 25",
-    "deploy:prod:complete": "code-push-standalone patch MyOrg/MyApp-iOS Production -r 100"
+    "deploy:prod:10": "delivr-cli release-react MyOrg/MyApp-iOS ios -d Production -r 10 --des \"$npm_package_version (10% rollout)\"",
+    "deploy:prod:increase": "delivr-cli patch MyOrg/MyApp-iOS Production -r 25",
+    "deploy:prod:complete": "delivr-cli patch MyOrg/MyApp-iOS Production -r 100"
   }
 }
 ```
@@ -196,7 +196,7 @@ For multi-environment support:
 ```json
 {
   "scripts": {
-    "deploy": "code-push-standalone release-react $APP_NAME $PLATFORM -d $DEPLOYMENT $FLAGS"
+    "deploy": "delivr-cli release-react $APP_NAME $PLATFORM -d $DEPLOYMENT $FLAGS"
   }
 }
 ```
@@ -214,7 +214,7 @@ APP_NAME=MyOrg/MyApp-Android PLATFORM=android DEPLOYMENT=Production FLAGS="--man
 
 ### Workflow 5: CI/CD Integration (GitHub Actions)
 
-Create `.github/workflows/codepush-deploy.yml`:
+Create `.github/workflows/delivr-deploy.yml`:
 
 ```yaml
 name: Deploy to CodePush
@@ -241,13 +241,13 @@ jobs:
         run: npm ci
       
       - name: Login to CodePush
-        run: npx code-push-standalone login --accessKey ${{ secrets.CODEPUSH_ACCESS_KEY }}
+        run: npx delivr-cli login --accessKey ${{ secrets.CODEPUSH_ACCESS_KEY }}
       
       - name: Deploy iOS to Staging
-        run: npx code-push-standalone release-react MyOrg/MyApp-iOS ios -d Staging --des "Auto-deployed from commit ${{ github.sha }}"
+        run: npx delivr-cli release-react MyOrg/MyApp-iOS ios -d Staging --des "Auto-deployed from commit ${{ github.sha }}"
       
       - name: Deploy Android to Staging
-        run: npx code-push-standalone release-react MyOrg/MyApp-Android android -d Staging --des "Auto-deployed from commit ${{ github.sha }}"
+        run: npx delivr-cli release-react MyOrg/MyApp-Android android -d Staging --des "Auto-deployed from commit ${{ github.sha }}"
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -264,17 +264,17 @@ jobs:
         run: npm ci
       
       - name: Login to CodePush
-        run: npx code-push-standalone login --accessKey ${{ secrets.CODEPUSH_ACCESS_KEY }}
+        run: npx delivr-cli login --accessKey ${{ secrets.CODEPUSH_ACCESS_KEY }}
       
       - name: Promote iOS to Production
-        run: npx code-push-standalone promote MyOrg/MyApp-iOS Staging Production --mandatory
+        run: npx delivr-cli promote MyOrg/MyApp-iOS Staging Production --mandatory
       
       - name: Promote Android to Production
-        run: npx code-push-standalone promote MyOrg/MyApp-Android Staging Production --mandatory
+        run: npx delivr-cli promote MyOrg/MyApp-Android Staging Production --mandatory
 ```
 
 **Setup:**
-1. Create CodePush access key: `code-push-standalone access-key add "GitHub Actions" --ttl 365d`
+1. Create CodePush access key: `delivr-cli access-key add "GitHub Actions" --ttl 365d`
 2. Add to GitHub Secrets as `CODEPUSH_ACCESS_KEY`
 3. Push to `develop` branch → Auto-deploy to Staging
 4. Merge to `main` branch → Auto-promote to Production
@@ -285,7 +285,7 @@ jobs:
 
 ### Custom Deployment Script
 
-Create `scripts/deploy-codepush.sh`:
+Create `scripts/deploy-delivr.sh`:
 
 ```bash
 #!/bin/bash
@@ -320,7 +320,7 @@ deploy() {
     FLAGS="--mandatory"
   fi
   
-  code-push-standalone release-react "$APP" "$PLATFORM" \
+  delivr-cli release-react "$APP" "$PLATFORM" \
     -d "$DEPLOYMENT" \
     --des "Version $VERSION" \
     $FLAGS
@@ -347,20 +347,20 @@ esac
 
 **Usage:**
 ```bash
-chmod +x scripts/deploy-codepush.sh
+chmod +x scripts/deploy-delivr.sh
 
 # Deploy to staging
-./scripts/deploy-codepush.sh staging
+./scripts/deploy-delivr.sh staging
 
 # Deploy to production
-./scripts/deploy-codepush.sh production
+./scripts/deploy-delivr.sh production
 ```
 
 ---
 
 ### Configuration File
 
-Create `.codepushrc.json`:
+Create `.delivrrc.json`:
 
 ```json
 {
@@ -385,7 +385,7 @@ Create `scripts/deploy-with-config.js`:
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const config = require('../.codepushrc.json');
+const config = require('../.delivrrc.json');
 const pkg = require('../package.json');
 
 const platform = process.argv[2]; // ios or android
@@ -400,7 +400,7 @@ const app = config.apps[platform];
 const deploymentName = config.deployments[deployment];
 const mandatory = deployment === 'production' ? '--mandatory' : '';
 
-const cmd = `code-push-standalone release-react ${app} ${platform} -d ${deploymentName} --des "${pkg.version}" ${mandatory}`;
+const cmd = `delivr-cli release-react ${app} ${platform} -d ${deploymentName} --des "${pkg.version}" ${mandatory}`;
 
 console.log(`Running: ${cmd}`);
 execSync(cmd, { stdio: 'inherit' });
@@ -429,38 +429,38 @@ npm run deploy android production
 
 ```bash
 # View all deployments with metrics
-code-push-standalone deployment ls MyOrg/MyApp-iOS
-code-push-standalone deployment ls MyOrg/MyApp-Android
+delivr-cli deployment ls MyOrg/MyApp-iOS
+delivr-cli deployment ls MyOrg/MyApp-Android
 
 # View with deployment keys
-code-push-standalone deployment ls MyOrg/MyApp-iOS -k
+delivr-cli deployment ls MyOrg/MyApp-iOS -k
 
 # View as JSON
-code-push-standalone deployment ls MyOrg/MyApp-iOS --format json
+delivr-cli deployment ls MyOrg/MyApp-iOS --format json
 ```
 
 ### View Deployment History
 
 ```bash
 # View release history
-code-push-standalone deployment history MyOrg/MyApp-iOS Staging
-code-push-standalone deployment history MyOrg/MyApp-iOS Production
+delivr-cli deployment history MyOrg/MyApp-iOS Staging
+delivr-cli deployment history MyOrg/MyApp-iOS Production
 
 # View as JSON
-code-push-standalone deployment history MyOrg/MyApp-iOS Production --format json
+delivr-cli deployment history MyOrg/MyApp-iOS Production --format json
 
 # View with author information
-code-push-standalone deployment history MyOrg/MyApp-iOS Production -a
+delivr-cli deployment history MyOrg/MyApp-iOS Production -a
 ```
 
 ### Emergency Rollback
 
 ```bash
 # Rollback to previous version
-code-push-standalone rollback MyOrg/MyApp-iOS Production
+delivr-cli rollback MyOrg/MyApp-iOS Production
 
 # Rollback to specific version
-code-push-standalone rollback MyOrg/MyApp-iOS Production --targetRelease v42
+delivr-cli rollback MyOrg/MyApp-iOS Production --targetRelease v42
 ```
 
 ---
@@ -471,23 +471,23 @@ code-push-standalone rollback MyOrg/MyApp-iOS Production --targetRelease v42
 
 ```bash
 # iOS simulator
-code-push-standalone debug ios
+delivr-cli debug ios
 
 # Android emulator/device
-code-push-standalone debug android
+delivr-cli debug android
 ```
 
 ### Check Account Status
 
 ```bash
 # Who am I logged in as?
-code-push-standalone whoami
+delivr-cli whoami
 
 # View active sessions
-code-push-standalone session ls
+delivr-cli session ls
 
 # View access keys
-code-push-standalone access-key ls
+delivr-cli access-key ls
 ```
 
 ---
@@ -497,31 +497,31 @@ code-push-standalone access-key ls
 ### 1. Version Descriptions
 Always include version info in descriptions:
 ```bash
-code-push-standalone release-react MyApp ios -d Staging --des "v1.2.3 - Bug fixes"
+delivr-cli release-react MyApp ios -d Staging --des "v1.2.3 - Bug fixes"
 ```
 
 ### 2. Use Mandatory Flags Wisely
 Only use `--mandatory` for critical updates:
 ```bash
 # Critical security fix
-code-push-standalone release-react MyApp ios -d Production --mandatory --des "Security fix - CVE-2023-1234"
+delivr-cli release-react MyApp ios -d Production --mandatory --des "Security fix - CVE-2023-1234"
 ```
 
 ### 3. Phased Rollouts for Production
 Always start with small percentage for production:
 ```bash
 # Start with 10%
-code-push-standalone release-react MyApp ios -d Production -r 10
+delivr-cli release-react MyApp ios -d Production -r 10
 
 # Monitor, then increase
-code-push-standalone patch MyApp Production -r 50
+delivr-cli patch MyApp Production -r 50
 ```
 
 ### 4. Separate iOS and Android Apps
 Always create separate apps for each platform:
 ```bash
-code-push-standalone app add MyOrg/MyApp-iOS
-code-push-standalone app add MyOrg/MyApp-Android
+delivr-cli app add MyOrg/MyApp-iOS
+delivr-cli app add MyOrg/MyApp-Android
 ```
 
 ### 5. Use npm Scripts
@@ -536,10 +536,10 @@ Standardize deployments across team with npm scripts.
 **Solution:**
 ```bash
 # If globally installed
-which code-push-standalone
+which delivr-cli
 
 # If local dev dependency
-npx code-push-standalone --help
+npx delivr-cli --help
 
 # Or add to npm script
 ```
@@ -548,9 +548,9 @@ npx code-push-standalone --help
 
 **Solution:**
 ```bash
-code-push-standalone login
+delivr-cli login
 # Or
-code-push-standalone login --accessKey YOUR_KEY
+delivr-cli login --accessKey YOUR_KEY
 ```
 
 ### Issue: App not found
@@ -558,10 +558,10 @@ code-push-standalone login --accessKey YOUR_KEY
 **Solution:**
 ```bash
 # List your apps
-code-push-standalone app ls
+delivr-cli app ls
 
 # Check app name (case-sensitive, include org if needed)
-code-push-standalone app add MyOrg/MyApp-iOS
+delivr-cli app add MyOrg/MyApp-iOS
 ```
 
 ---
