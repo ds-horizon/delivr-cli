@@ -10,7 +10,6 @@ const recursiveFs = require("recursive-fs");
 const yazl = require("yazl");
 const slash = require("slash");
 const zlib = require("zlib");
-const progress = require("progress");
 const ORG_FILE_PATH = path.resolve(__dirname, 'organisations.json');
 var Promise = Q.Promise;
 const packageJson = require("../../package.json");
@@ -383,17 +382,7 @@ class AccountManager {
                     });
                     try {
                         if (compression === 'brotli') {
-                            const progressBar = new progress('Compressing: [:bar] :current/:total files processed', {
-                                complete: '=',
-                                incomplete: ' ',
-                                width: 50,
-                                total: files.length + 1
-                            });
-                            let lastTotalProgress = 0;
-                            const uploadProgress = (currentProgress) => {
-                                progressBar.tick(currentProgress - lastTotalProgress);
-                                lastTotalProgress = currentProgress;
-                            };
+                            console.log(`\nCompressing ${files.length} files...`);
                             // For Brotli, compress each file individually
                             for (let i = 0; i < files.length; ++i) {
                                 const file = files[i];
@@ -409,7 +398,6 @@ class AccountManager {
                                 zipFile.addReadStream(brotliStream, `${relativePath}.br`);
                                 // Write content to stream
                                 brotliStream.end(fileContent);
-                                uploadProgress(i + 1);
                             }
                         }
                         else {

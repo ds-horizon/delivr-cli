@@ -10,7 +10,6 @@ import * as recursiveFs from "recursive-fs";
 import * as yazl from "yazl";
 import slash = require("slash");
 import * as zlib from "zlib";
-import * as progress from "progress";
 
 const ORG_FILE_PATH = path.resolve(__dirname, 'organisations.json');
 
@@ -513,19 +512,7 @@ class AccountManager {
 
           try {
             if (compression === 'brotli') {
-
-              const progressBar = new progress('Compressing: [:bar] :current/:total files processed', {
-                complete: '=',
-                incomplete: ' ',
-                width: 50,
-                total: files.length + 1
-              });
-              let lastTotalProgress = 0;
-              const uploadProgress = (currentProgress: number): void => {
-                progressBar.tick(currentProgress - lastTotalProgress);
-                lastTotalProgress = currentProgress;
-              };
-
+              console.log(`\nCompressing ${files.length} files...`);
               // For Brotli, compress each file individually
               for (let i = 0; i < files.length; ++i) {
                 const file: string = files[i];
@@ -544,7 +531,6 @@ class AccountManager {
 
                 // Write content to stream
                 brotliStream.end(fileContent);
-                uploadProgress(i + 1);
               }
             } else {
               for (let i = 0; i < files.length; ++i) {
