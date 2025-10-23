@@ -1,72 +1,37 @@
-# CodePush CLI
+# Delivr CLI
 
-The CodePush CLI is a Node.js application that allows users to interact with CodePush Server.
+The Delivr CLI (`code-push-standalone`) is a Node.js application that allows users to deploy and manage over-the-air updates for React Native applications.
 
-## Installation
+## Installation & Usage
 
-To run the CodePush CLI, follow these steps:
-
-1. Clone the CodePush Service repository.
-1. Install the necessary dependencies by running `npm install`.
-1. Build the CLI by running `npm run build`.
-1. Install CLI globally by running `npm install -g`.
-
-## Getting started
-
-1. Create a [CodePush account](#account-creation) push using the CodePush CLI.
-1. Register your app with CodePush, and optionally share it with other developers on your team.
-1. CodePush-ify your app and point it at the deployment you wish to use.
-1. Release an update for your app.
-1. Check out the debug logs to ensure everything is working as expected.
-
-## Usage
-
-After installing CodePush CLI globally, it will be available under `code-push-standalone`.
-
-## Binary Patch Operations
-
-DOTA optimizes over-the-air updates by using binary diffing to create minimal patch files. Instead of sending complete bundles, it sends only the changes between versions, significantly reducing update sizes.
-
-### Creating Patches
-
-Create a binary patch between two bundle versions:
-
-```shell
-code-push-standalone create-patch <old_bundle> <new_bundle> <patch_directory>
+### Global Installation
+```bash
+npm install -g @d11/delivr-cli
+```
+After global installation, you can use the CLI directly:
+```bash
+code-push-standalone <command>
 ```
 
-Parameters:
-- `old_bundle`: Path to the current version bundle
-- `new_bundle`: Path to the updated version bundle
-- `patch_directory`: Directory where the patch file will be saved (created if doesn't exist)
+### Project Installation
+```bash
+# Using npm
+npm install --save-dev @d11/delivr-cli
 
-Example:
-```shell
-code-push-standalone create-patch \
-  .old/index.android.bundle \
-  .new/index.android.bundle \
-  ./patches/v1-to-v2/
+# Using yarn
+yarn add --dev @d11/delivr-cli
 ```
+After project installation, you can use the CLI through npm/yarn:
+```bash
+# Using npm
+npm run code-push-standalone <command>
 
-This will create `bundle.patch` in the specified directory.
+# Using yarn
+yarn code-push-standalone <command>
 
-### Applying Patches
-
-Apply a patch to update an existing bundle:
-
-```shell
-code-push-standalone apply-patch <old_bundle> <patch_file> <output_file>
+# Using npx
+npx code-push-standalone <command>
 ```
-
-Example:
-```shell
-code-push-standalone apply-patch \
-  ./current/index.android.bundle \
-  ./patches/v1-to-v2/bundle.patch \
-  ./updated/index.android.bundle
-```
-
-For detailed information about the binary diff algorithm, see [bsdiff43 documentation](bsdiff/README.md).
 
 ## Account Management
 
@@ -626,6 +591,53 @@ _NOTE: This parameter can be set using either --xcodeTargetName or -xt_
 Name of build configuration which specifies the binary version you want to target this release at. For example, 'Debug' or 'Release' (iOS only).
 
 _NOTE: This parameter can be set using either --buildConfigurationName or -c_
+
+### Releasing Patch Bundle
+
+Delivr optimizes over-the-air updates by using binary diffing to create minimal patch files. Instead of sending complete bundles, it sends only the changes between versions, significantly reducing update sizes.
+
+### Creating Patches
+
+Create a binary patch between two bundle versions:
+
+```shell
+code-push-standalone create-patch <old_bundle> <new_bundle> <patch_directory>
+```
+
+Parameters:
+- `old_bundle`: Path to the current version bundle
+- `new_bundle`: Path to the updated version bundle
+- `patch_directory`: Directory where the patch file will be saved (created if doesn't exist)
+
+Example:
+```shell
+code-push-standalone create-patch \
+  .old/index.android.bundle \
+  .new/index.android.bundle \
+  ./patches/v1-to-v2/
+```
+
+This will create `bundle.patch` in the specified directory.
+
+_NOTE:  Now instead of sending full bundle we send patch bundle using `--isPatch true` in `release` script._
+
+### Applying Patches
+
+Apply a patch to update an existing bundle:
+
+```shell
+code-push-standalone apply-patch <old_bundle> <patch_file> <output_file>
+```
+
+Example:
+```shell
+code-push-standalone apply-patch \
+  ./current/index.android.bundle \
+  ./patches/v1-to-v2/bundle.patch \
+  ./updated/index.android.bundle
+```
+
+For detailed information about the binary diff algorithm, see [bsdiff43 documentation](bsdiff/README.md).
 
 ## Debugging CodePush Integration
 
