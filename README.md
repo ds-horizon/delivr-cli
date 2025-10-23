@@ -1,92 +1,49 @@
-# CodePush CLI
+# Delivr CLI (@d11/delivr-cli)
 
-The CodePush CLI is a Node.js application that allows users to interact with CodePush Server.
+The Delivr CLI (`code-push-standalone`) is a Node.js application that allows users to deploy and manage over-the-air updates for React Native applications.
 
-## Installation
+## Installation & Usage
 
-To run the CodePush CLI, follow these steps:
-
-1. Clone the CodePush Service repository.
-1. Install the necessary dependencies by running `npm install`.
-1. Build the CLI by running `npm run build`.
-1. Install CLI globally by running `npm install -g`.
-
-## Getting started
-
-1. Create a [CodePush account](#account-creation) push using the CodePush CLI.
-1. Register your app with CodePush, and optionally share it with other developers on your team.
-1. CodePush-ify your app and point it at the deployment you wish to use.
-1. Release an update for your app.
-1. Check out the debug logs to ensure everything is working as expected.
-
-## Usage
-
-After installing CodePush CLI globally, it will be available under `code-push-standalone`.
-
-## Binary Patch Operations
-
-DOTA optimizes over-the-air updates by using binary diffing to create minimal patch files. Instead of sending complete bundles, it sends only the changes between versions, significantly reducing update sizes.
-
-### Creating Patches
-
-Create a binary patch between two bundle versions:
-
-```shell
-code-push-standalone create-patch <old_bundle> <new_bundle> <patch_directory>
+### Global Installation
+```bash
+npm install -g @d11/delivr-cli
+```
+After global installation, you can use the CLI directly:
+```bash
+code-push-standalone <command>
 ```
 
-Parameters:
-- `old_bundle`: Path to the current version bundle
-- `new_bundle`: Path to the updated version bundle
-- `patch_directory`: Directory where the patch file will be saved (created if doesn't exist)
+### Project Installation
+```bash
+# Using npm
+npm install --save-dev @d11/delivr-cli
 
-Example:
-```shell
-code-push-standalone create-patch \
-  .old/index.android.bundle \
-  .new/index.android.bundle \
-  ./patches/v1-to-v2/
+# Using yarn
+yarn add --dev @d11/delivr-cli
+```
+After project installation, you can use the CLI through npm/yarn:
+```bash
+# Using npm
+npm run code-push-standalone <command>
+
+# Using yarn
+yarn code-push-standalone <command>
+
+# Using npx
+npx code-push-standalone <command>
 ```
 
-This will create `bundle.patch` in the specified directory.
+## Getting Started
 
-### Applying Patches
+Most commands in Delivr CLI require authentication. Before you begin, you'll need an access key.
 
-Apply a patch to update an existing bundle:
-
-```shell
-code-push-standalone apply-patch <old_bundle> <patch_file> <output_file>
-```
-
-Example:
-```shell
-code-push-standalone apply-patch \
-  ./current/index.android.bundle \
-  ./patches/v1-to-v2/bundle.patch \
-  ./updated/index.android.bundle
-```
-
-For detailed information about the binary diff algorithm, see [bsdiff43 documentation](bsdiff/README.md).
-
-## Account Management
-
-Before you can begin releasing app updates, you need to create a CodePush account. You can do this by simply running the following command once you've installed the CLI:
-
-```
-code-push-standalone register <optional: server-url>
-```
-
-This will launch a browser, asking you to authenticate with either your GitHub or Microsoft account. Once authenticated, it will create a CodePush account "linked" to your GitHub/MSA identity, and generate an access key you can copy/paste into the CLI in order to login.
-
-_Note: After registering, you are automatically logged-in with the CLI, so until you explicitly log out, you don't need to login again from the same machine._
-
-If you have an existing account, you may also link your account to another identity provider (e.g. Microsoft, GitHub) by running:
-
-```
-code-push-standalone link
-```
-
-_Note: In order to link multiple accounts, the email address associated with each provider must match._
+### Authentication Setup
+1. Visit the [Delivr Web Panel](https://github.com/ds-horizon/delivr-web-panel).
+2. Generate a new access key
+4. Login to CLI using the access key:
+   ```bash
+   code-push-standalone login --accessKey <your-access-key>
+   ```
 
 ### Authentication
 
