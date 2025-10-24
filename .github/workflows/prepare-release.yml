@@ -40,10 +40,21 @@ jobs:
         id: release_notes
         run: |
           echo "## What's Changed" > release_notes.md
-          git log --pretty=format:"* %s" v${{ steps.version.outputs.current_version }}..HEAD >> release_notes.md
-          echo "" >> release_notes.md
-          echo "## Full Changelog" >> release_notes.md
-          echo "https://github.com/${{ github.repository }}/compare/v${{ steps.version.outputs.current_version }}...v${{ steps.version.outputs.new_version }}" >> release_notes.md
+          
+          # Check if there are any tags
+          if git rev-parse --verify "v${{ steps.version.outputs.current_version }}" >/dev/null 2>&1; then
+            # If tag exists, get commits since last tag
+            git log --pretty=format:"* %s" v${{ steps.version.outputs.current_version }}..HEAD >> release_notes.md
+            echo "" >> release_notes.md
+            echo "## Full Changelog" >> release_notes.md
+            echo "https://github.com/${{ github.repository }}/compare/v${{ steps.version.outputs.current_version }}...v${{ steps.version.outputs.new_version }}" >> release_notes.md
+          else
+            # If no tags exist, get all commits
+            git log --pretty=format:"* %s" >> release_notes.md
+            echo "" >> release_notes.md
+            echo "## First Release" >> release_notes.md
+            echo "First release of the package." >> release_notes.md
+          fi
 
       # Create PR branch
       - name: Create release branch
