@@ -143,6 +143,8 @@ code-push-standalone release MyApp-iOS ./.codeupush/patches "1.0.0" \
 
 _Note: Make sure to upload assets alongwith patch bundle._
 
+For more details about the binary diff implementation, see [bsdiff/README.md](./bsdiff/README.md).
+
 ### Promote Updates
 After testing in staging, promote to production:
 ```bash
