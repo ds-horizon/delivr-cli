@@ -1,11 +1,11 @@
-# Advanced Usage Guide
+# Delivr CLI Reference Guide
 
-This document contains all available commands and detailed information about the Delivr CLI.
+A comprehensive reference for all Delivr CLI commands, options, and features.
 
 ## Command Reference
 
 ### Authentication Commands
-[Detailed Documentation](#authentication)
+
 - [`register`](#authentication) - Create a new account
 - [`login`](#authentication) - Login to your account
 - [`logout`](#authentication) - Logout from your session
@@ -16,7 +16,7 @@ This document contains all available commands and detailed information about the
 - [`access-key patch`](#access-keys) - Update an access key
 
 ### App Management Commands
-[Detailed Documentation](#app-management)
+
 - [`app add`](#app-management) - Create a new app
 - [`app ls`](#app-management) - List all apps
 - [`app rename`](#app-management) - Rename an app
@@ -27,7 +27,7 @@ This document contains all available commands and detailed information about the
 - [`collaborator ls`](#app-collaboration) - List collaborators
 
 ### Deployment Commands
-[Detailed Documentation](#deployment-management)
+
 - [`deployment ls`](#deployment-management) - List deployments
 - [`deployment add`](#deployment-management) - Add a deployment
 - [`deployment rm`](#deployment-management) - Remove a deployment
@@ -36,7 +36,7 @@ This document contains all available commands and detailed information about the
 - [`deployment history`](#viewing-release-history) - View deployment history
 
 ### Release Commands
-[Detailed Documentation](#releasing-updates)
+
 - [`release`](#releasing-updates-general) - Release an update
 - [`release-react`](#releasing-updates-react-native) - Release a React Native update
 - [`patch`](#patching-update-metadata) - Modify release metadata
@@ -45,12 +45,12 @@ This document contains all available commands and detailed information about the
 - [`rollback`](#rolling-back-updates) - Rollback a release
 
 ### Binary Patch Commands
-[Detailed Documentation](#binary-patch-operations)
+
 - [`create-patch`](#creating-patches) - Create a binary patch
 - [`apply-patch`](#applying-patches) - Apply a binary patch
 
 ### Debug Commands
-[Detailed Documentation](#debugging-codepush-integration)
+
 - [`debug`](#debugging-codepush-integration) - View debug logs
 
 ---
