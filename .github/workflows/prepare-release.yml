@@ -62,8 +62,18 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout -b release/v${{ steps.version.outputs.new_version }}
+          
+          # Update package.json version
+          npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
+          
+          # Stage both package.json and release notes
           git add package.json
-          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
+          git add release_notes.md
+          
+          # Commit changes
+          git commit -m "chore: release version ${{ steps.version.outputs.new_version }}"
+          
+          # Push branch
           git push origin release/v${{ steps.version.outputs.new_version }}
 
       # Create Pull Request
