@@ -26,83 +26,80 @@ jobs:
         with:
           node-version: '18.x'
 
-      # Get current version and calculate new version
-      - name: Calculate new version
-        id: version
+      # Install all dependencies first
+      - name: Install Dependencies
         run: |
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
-          NEW_VERSION=$(npm version ${{ github.event.inputs.version_type }} --no-git-tag-version)
-          echo "new_version=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
-          echo "current_version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
-
-      # Generate release notes from commits
-      - name: Generate release notes
-        id: release_notes
-        run: |
-          echo "## What's Changed" > release_notes.md
+          # System dependencies for bsdiff
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev
           
-          # Check if there are any tags
-          if git rev-parse --verify "v${{ steps.version.outputs.current_version }}" >/dev/null 2>&1; then
-            # If tag exists, get commits since last tag
-            git log --pretty=format:"* %s" v${{ steps.version.outputs.current_version }}..HEAD >> release_notes.md
-            echo "" >> release_notes.md
-            echo "## Full Changelog" >> release_notes.md
-            echo "https://github.com/${{ github.repository }}/compare/v${{ steps.version.outputs.current_version }}...v${{ steps.version.outputs.new_version }}" >> release_notes.md
-          else
-            # If no tags exist, get all commits
-            git log --pretty=format:"* %s" >> release_notes.md
-            echo "" >> release_notes.md
-            echo "## First Release" >> release_notes.md
-            echo "First release of the package." >> release_notes.md
-          fi
-
-      # Create PR branch
-      - name: Create release branch
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          # Install system dependencies
-          sudo apt-get update && sudo apt-get install -y libbz2-dev
-
-          # Install dependencies
+          # npm dependencies with exact lockfile
           npm ci
 
-          # Create new branch
-          git checkout -b release/v${{ steps.version.outputs.new_version }}
+      # Handle version bump and create PR
+      - name: Prepare Release
+        id: release
+        run: |
+          # Setup git
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Update version only once
+          # Get current version before bump
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           echo "Current version: $CURRENT_VERSION"
           
-          # Update package.json and package-lock.json
-          npm version ${{ github.event.inputs.version_type }} --no-git-tag-version --force
+          # Create new branch with next version
+          NEW_BRANCH="release/v$CURRENT_VERSION-next"
+          git checkout -b $NEW_BRANCH
           
+          # Bump version in package.json
+          npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
           NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "New version: $NEW_VERSION"
           
-          # Stage all version-related files
-          git add package.json
-          git add package-lock.json
-          git add release_notes.md
+          # Generate release notes
+          echo "## What's Changed" > release_notes.md
+          if git rev-parse --verify "v$CURRENT_VERSION" >/dev/null 2>&1; then
+            git log --pretty=format:"* %s" v$CURRENT_VERSION..HEAD >> release_notes.md
+            echo -e "\n\n## Full Changelog" >> release_notes.md
+            echo "https://github.com/${{ github.repository }}/compare/v$CURRENT_VERSION...v$NEW_VERSION" >> release_notes.md
+          else
+            git log --pretty=format:"* %s" >> release_notes.md
+            echo -e "\n\n## First Release" >> release_notes.md
+            echo "First release of the package." >> release_notes.md
+          fi
           
-          # Commit changes
-          git commit -m "chore: release version $NEW_VERSION"
+          # Update package-lock.json
+          npm install --package-lock-only
           
-          # Force push to handle any existing branch
-          git push -f origin release/v$NEW_VERSION
+          # Stage and commit all changes
+          git add package.json package-lock.json release_notes.md
+          git commit -m "chore: prepare release v$NEW_VERSION"
+          
+          # Push to new branch
+          git push -f origin $NEW_BRANCH
+          
+          # Rename branch to final version
+          git push origin -d $NEW_BRANCH || true
+          FINAL_BRANCH="release/v$NEW_VERSION"
+          git branch -m $NEW_BRANCH $FINAL_BRANCH
+          git push -f origin $FINAL_BRANCH
 
       # Create Pull Request
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Release v${{ steps.version.outputs.new_version }}'
+          title: '🚀 Release v${{ env.NEW_VERSION }}'
           body: |
-            Automated release PR for version ${{ steps.version.outputs.new_version }}
+            ## Release v${{ env.NEW_VERSION }}
             
             $(cat release_notes.md)
-          branch: release/v${{ steps.version.outputs.new_version }}
+            
+            ---
+            This PR was automatically generated by the release workflow.
+          branch: release/v${{ env.NEW_VERSION }}
           base: main
           labels: release
           draft: false
